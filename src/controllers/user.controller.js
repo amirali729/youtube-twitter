@@ -135,8 +135,8 @@ const logoutUser = asyncHandler(async (req, res) => {
     await User.findByIdAndUpdate(
         req.user._id,
         {
-            $set: {
-                refreshToken: undefined
+            $unset: {
+                refreshToken: 1
             }
         },
         {
@@ -198,7 +198,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 const changeUserPassword = asyncHandler(async (req, res) => {
     const { oldPassword, newPassword } = req.body
 
-    const user = User.findById(req.user?._id)
+    const user = await  User.findById(req.user?._id)
     const passwordCheck = user.isPasswordCorrect(oldPassword)
 
     if (!passwordCheck) {
@@ -232,7 +232,7 @@ const updateUserDetails = asyncHandler(async (req, res) => {
     if (!fullName || !email) {
         throw new ApiError(400, "both emails and fullName is required")
     }
-    const user = User.findByIdAndUpdate(
+    const user = await User.findByIdAndUpdate(
         req.user?._id,
         {
             $set: {
@@ -265,7 +265,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
         throw new ApiError(404, "sorry there some error while uploading the file please try later")
     }
 
-    const user = User.findByIdAndUpdate(
+    const user = await  User.findByIdAndUpdate(
         req.user?._id,
         {
             $set: {
@@ -327,7 +327,7 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
         throw new ApiError(400, "could not get user id")
     }
 
-    const channel = User.aggregate([
+    const channel = await User.aggregate([
         {
             $match: {
                 userName: userName?.toLowerCase()
