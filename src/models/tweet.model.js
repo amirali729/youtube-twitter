@@ -4,16 +4,16 @@ const tweetSchema = new mongoose.Schema({
     content: {
         type: String,
         required: true,
-        minlenght: 10,
-        maxlenght: 100,
+        minlength: 10,
+        maxlength: 100
     },
-    owner: {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     }
-   
-},{
-    timestamps:true
+
+}, {
+    timestamps: true
 })
 
-export const Tweet = new mongoose.model("Tweet",tweetSchema)
+export const Tweet = mongoose.model("Tweet", tweetSchema)
